@@ -31,7 +31,7 @@ class BigNumber {
         int currentOp = 0;
         for (int i = 0; i < length; i++) {
 
-            currentOp = ((int) (this.value.charAt(length - i - 1)) + (int) (other.value.charAt(length - i - 1)) - 96);
+            currentOp = ((int) (this.value.charAt(length - i - 1)-48) + (int) (other.value.charAt(length - i - 1)-48) );
             if (carryOver) {
                 currentOp++;
             }
@@ -50,6 +50,35 @@ class BigNumber {
 
     // Resta
     BigNumber sub(BigNumber other) {
+
+        if (other.value.length() > this.value.length()) {
+            this.value = equalizer(this.value, other.value.length());
+        } else {
+            other.value = equalizer(other.value, this.value.length());
+        }
+        this.value = "0" + this.value;
+        other.value = "0" + other.value;
+
+        int length = this.value.length();
+        boolean carryOver = false;
+        StringBuilder result = new StringBuilder();
+        int currentOp = 0;
+        for (int i = 0; i < length; i++) {
+
+            currentOp = ((int) (this.value.charAt(length - i - 1)-48) - (int) (other.value.charAt(length - i - 1)-48) );
+            if (carryOver) {
+                currentOp--;
+            }
+            carryOver = false;
+
+            if (currentOp < 0) {
+                carryOver = true;
+                currentOp = currentOp + 10;
+            }
+            result.insert(0, Integer.toString(currentOp));
+
+        }
+        this.value = result.toString();
         return this;
 
     }
