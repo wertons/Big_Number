@@ -31,7 +31,7 @@ class BigNumber {
         int currentOp = 0;
         for (int i = 0; i < length; i++) {
 
-            currentOp = ((int) (this.value.charAt(length - i - 1)-48) + (int) (other.value.charAt(length - i - 1)-48) );
+            currentOp = ((int) (this.value.charAt(length - i - 1) - 48) + (int) (other.value.charAt(length - i - 1) - 48));
             if (carryOver) {
                 currentOp++;
             }
@@ -65,7 +65,7 @@ class BigNumber {
         int currentOp = 0;
         for (int i = 0; i < length; i++) {
 
-            currentOp = ((int) (this.value.charAt(length - i - 1)-48) - (int) (other.value.charAt(length - i - 1)-48) );
+            currentOp = ((int) (this.value.charAt(length - i - 1) - 48) - (int) (other.value.charAt(length - i - 1) - 48));
             if (carryOver) {
                 currentOp--;
             }
@@ -85,8 +85,24 @@ class BigNumber {
 
     // Multiplica
     BigNumber mult(BigNumber other) {
-        return this;
+        this.value = reductor(this.value);
+        other.value = reductor(other.value);
 
+        BigNumber tmpThis = new BigNumber(this);
+        BigNumber tmpNum = new BigNumber("0");
+        int currOp = 0;
+        for (int i = 0; i < other.value.length(); i++) {
+            currOp = other.value.charAt(other.value.length()-i-1)-48;
+
+            for (int j = 0; j < currOp; j++) {
+
+                tmpNum.add(tmpThis);
+            }
+            tmpThis.value += "0";
+
+        }
+
+        return tmpNum;
     }
 
     // Divideix
@@ -177,4 +193,20 @@ class BigNumber {
         }
         return currentStr;
     }
+
+    public String reductor(String str) {
+        boolean firstFound = false;
+        StringBuilder reduction = new StringBuilder();
+        reduction.append(str);
+        for (int i = 0; i < str.length(); i++) {
+            if (reduction.charAt(0) == 48) {
+                reduction.replace(0, 1, "");
+            } else {
+                break;
+            }
+        }
+
+        return reduction.toString();
+    }
+
 }
