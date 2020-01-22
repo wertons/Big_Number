@@ -79,6 +79,7 @@ class BigNumber {
         } else {
             equalizer(this.value, other.value.length());
         }
+        String a = "a";
         return false;
     }
 
