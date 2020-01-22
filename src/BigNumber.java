@@ -1,6 +1,12 @@
+import java.util.Stack;
+
 class BigNumber {
 
     String value = "";
+
+    public BigNumber() {
+
+    }
 
     // Constructor 1
     public BigNumber(String s) {
@@ -73,14 +79,24 @@ class BigNumber {
     }
 
     // Mira si dos objectes BigNumber són iguals
-    public boolean equals(BigNumber other) {
-        if (this.value.length() > other.value.length()) {
-            equalizer(other.value, this.value.length());
-        } else {
-            equalizer(this.value, other.value.length());
+
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) {
+            return true;
         }
-        String a = "a";
-        return false;
+        if (!(other instanceof BigNumber)){
+            return false;
+        }
+        BigNumber ot = (BigNumber) other;
+        if (ot.value.length() > this.value.length()){
+            this.value = equalizer( this.value, ot.value.length());
+        } else {
+            ot.value = equalizer( ot.value, this.value.length());
+
+        }
+        return this.value.equals(ot.value);
+
     }
 
     public String equalizer(String currentStr, int targetSize) {
