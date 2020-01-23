@@ -1,5 +1,3 @@
-import java.util.Stack;
-
 class BigNumber {
 
     String value = "";
@@ -85,14 +83,14 @@ class BigNumber {
 
     // Multiplica
     BigNumber mult(BigNumber other) {
-        this.value = reductor(this.value);
-        other.value = reductor(other.value);
+        this.value = reducer(this.value);
+        other.value = reducer(other.value);
 
         BigNumber tmpThis = new BigNumber(this);
         BigNumber tmpNum = new BigNumber("0");
         int currOp = 0;
         for (int i = 0; i < other.value.length(); i++) {
-            currOp = other.value.charAt(other.value.length()-i-1)-48;
+            currOp = other.value.charAt(other.value.length() - i - 1) - 48;
 
             for (int j = 0; j < currOp; j++) {
 
@@ -107,8 +105,48 @@ class BigNumber {
 
     // Divideix
     BigNumber div(BigNumber other) {
-        return this;
+        boolean done = false;
+        int counter = 0;
+        int restCounter = 0;
+        BigNumber currOP = new BigNumber("");
+        BigNumber rest = new BigNumber("");
+        StringBuilder tmpStr = new StringBuilder();
+        String tmpStorage = "";
+        while (this.compareTo(other) != -1) {
 
+
+            if (currOP.compareTo(other) == -1) {
+                counter++;
+
+                tmpStr.append(this.value.substring(counter - 1, counter));
+                currOP.value = tmpStr.toString();
+
+            } else {
+                while (currOP.compareTo(other) != -1) {
+                    currOP.sub(other);
+                    currOP.value = reducer(currOP.value);
+                    restCounter++;
+                }
+                currOP.value = reducer(currOP.value);
+                tmpStorage = currOP.value;
+                tmpStr.setLength(0);
+                tmpStr.append(this.value);
+                tmpStr.replace(0, counter, currOP.value);
+                counter -= (counter - currOP.value.length());
+                this.value = tmpStr.toString();
+
+                tmpStr.setLength(0);
+                tmpStr.append(tmpStorage);
+                rest.value += restCounter;
+                restCounter = 0;
+
+
+            }
+        }
+        if (currOP.compareTo(new BigNumber("0")) == 0) {
+            rest.value += "0";
+        }
+        return this;
     }
 
     // Arrel quadrada
@@ -119,18 +157,42 @@ class BigNumber {
 
     // Potència
     BigNumber power(int n) {
-        return this;
+        BigNumber result = new BigNumber(this.value);
+
+        for (int i = 0; i < n - 1; i++) {
+            result.value = result.mult(this).value;
+        }
+        return result;
 
     }
 
     // Factorial
     BigNumber factorial() {
-        return this;
+        BigNumber result = new BigNumber(this.value);
+        BigNumber counter = new BigNumber(this.value);
+        BigNumber one = new BigNumber("1");
+        while (counter.compareTo(new BigNumber("0")) != 0) {
+
+            counter.sub(one);
+            if (counter.compareTo(new BigNumber("0")) == 0) {
+                break;
+            }
+            result.value = result.mult(counter).value;
+        }
+
+        return result;
 
     }
 
     // MCD. Torna el Màxim comú divisor
     BigNumber mcd(BigNumber other) {
+        while (this.compareTo(other) != 0) {
+            if (this.compareTo(other) == 1) {
+                this.value = this.sub(other).value;
+            } else {
+                other.value = other.sub(this).value;
+            }
+        }
         return this;
 
     }
@@ -194,7 +256,9 @@ class BigNumber {
         return currentStr;
     }
 
-    public String reductor(String str) {
+
+    public String reducer(String str) {
+
         boolean firstFound = false;
         StringBuilder reduction = new StringBuilder();
         reduction.append(str);
@@ -204,6 +268,9 @@ class BigNumber {
             } else {
                 break;
             }
+        }
+        if (reduction.toString().isEmpty()) {
+            reduction.insert(0, "0");
         }
 
         return reduction.toString();

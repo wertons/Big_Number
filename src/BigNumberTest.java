@@ -152,7 +152,7 @@ public class BigNumberTest {
     @Test
     public void multiplicacions() {
         BigNumber b1, b2;
-/*
+
         b1 = new BigNumber("2");
         b2 = new BigNumber("02");
         assertEquals(b1, b2);
@@ -175,7 +175,7 @@ public class BigNumberTest {
         b1 = new BigNumber("685");
         b2 = new BigNumber("5");
         assertEquals(new BigNumber("3425"), b1.mult(b2));
-*/
+
         b1 = new BigNumber("154");
         b2 = new BigNumber("43");
         assertEquals(new BigNumber("6622"), b1.mult(b2));
@@ -216,6 +216,19 @@ public class BigNumberTest {
     @Test
     public void divisions() {
         BigNumber b1, b2;
+/*
+        b1 = new BigNumber("241");
+        b2 = new BigNumber("2");
+        assertEquals(new BigNumber("120"), b1.div(b2));
+
+        b1 = new BigNumber("100");
+        b2 = new BigNumber("10");
+        assertEquals(new BigNumber("10"), b1.div(b2));
+*/
+
+        b1 = new BigNumber("12121");
+        b2 = new BigNumber("2");
+        assertEquals(new BigNumber("6060"), b1.div(b2));
 
         b1 = new BigNumber("45354645634563456345456345234545897894562634563456");
         b2 = new BigNumber("45634563456345634563456546799008905634563456456");
@@ -229,9 +242,7 @@ public class BigNumberTest {
         b2 = new BigNumber("22");
         assertEquals(new BigNumber("561165710661975288438943994498540"), b1.div(b2));
 
-        b1 = new BigNumber("10");
-        b2 = new BigNumber("5");
-        assertEquals(new BigNumber("2"), b1.div(b2));
+
 
         b1 = new BigNumber("12323");
         b2 = new BigNumber("546445");
@@ -245,13 +256,15 @@ public class BigNumberTest {
         b2 = new BigNumber("3242");
         assertEquals(new BigNumber("7"), b1.div(b2));
 
-        b1 = new BigNumber("2343453452342321234234");
+      b1 = new BigNumber("2343453452342321234234");
         b2 = new BigNumber("33324234234232382422");
         assertEquals(new BigNumber("70"), b1.div(b2));
 
         b1 = new BigNumber("56734564576346234567567834534565675674567");
         b2 = new BigNumber("9999999999999999463499999999999999999");
         assertEquals(new BigNumber("5673"), b1.div(b2));
+
+
     }
 
     @Test
