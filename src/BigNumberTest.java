@@ -216,7 +216,7 @@ public class BigNumberTest {
     @Test
     public void divisions() {
         BigNumber b1, b2;
-/*
+
         b1 = new BigNumber("241");
         b2 = new BigNumber("2");
         assertEquals(new BigNumber("120"), b1.div(b2));
@@ -224,7 +224,7 @@ public class BigNumberTest {
         b1 = new BigNumber("100");
         b2 = new BigNumber("10");
         assertEquals(new BigNumber("10"), b1.div(b2));
-*/
+
 
         b1 = new BigNumber("12121");
         b2 = new BigNumber("2");

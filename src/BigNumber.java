@@ -1,35 +1,35 @@
 class BigNumber {
 
-    String value = "";
+    String numericalValue = "";
 
 
     // Constructor 1
     public BigNumber(String s) {
-        this.value = s;
+        this.numericalValue = s;
     }
 
     // Constructor 2
     public BigNumber(BigNumber b) {
-        this.value = b.value;
+        this.numericalValue = b.numericalValue;
     }
 
     // Suma
     BigNumber add(BigNumber other) {
-        if (other.value.length() > this.value.length()) {
-            this.value = equalizer(this.value, other.value.length());
+        if (other.numericalValue.length() > this.numericalValue.length()) {
+            this.numericalValue = equalizer(this.numericalValue, other.numericalValue.length());
         } else {
-            other.value = equalizer(other.value, this.value.length());
+            other.numericalValue = equalizer(other.numericalValue, this.numericalValue.length());
         }
-        this.value = "0" + this.value;
-        other.value = "0" + other.value;
+        this.numericalValue = "0" + this.numericalValue;
+        other.numericalValue = "0" + other.numericalValue;
 
-        int length = this.value.length();
+        int length = this.numericalValue.length();
         boolean carryOver = false;
         StringBuilder result = new StringBuilder();
         int currentOp = 0;
         for (int i = 0; i < length; i++) {
 
-            currentOp = ((int) (this.value.charAt(length - i - 1) - 48) + (int) (other.value.charAt(length - i - 1) - 48));
+            currentOp = ((int) (this.numericalValue.charAt(length - i - 1) - 48) + (int) (other.numericalValue.charAt(length - i - 1) - 48));
             if (carryOver) {
                 currentOp++;
             }
@@ -42,28 +42,28 @@ class BigNumber {
             result.insert(0, Integer.toString(currentOp));
 
         }
-        this.value = result.toString();
+        this.numericalValue = result.toString();
         return this;
     }
 
     // Resta
     BigNumber sub(BigNumber other) {
 
-        if (other.value.length() > this.value.length()) {
-            this.value = equalizer(this.value, other.value.length());
+        if (other.numericalValue.length() > this.numericalValue.length()) {
+            this.numericalValue = equalizer(this.numericalValue, other.numericalValue.length());
         } else {
-            other.value = equalizer(other.value, this.value.length());
+            other.numericalValue = equalizer(other.numericalValue, this.numericalValue.length());
         }
-        this.value = "0" + this.value;
-        other.value = "0" + other.value;
+        this.numericalValue = "0" + this.numericalValue;
+        other.numericalValue = "0" + other.numericalValue;
 
-        int length = this.value.length();
+        int length = this.numericalValue.length();
         boolean carryOver = false;
         StringBuilder result = new StringBuilder();
         int currentOp = 0;
         for (int i = 0; i < length; i++) {
 
-            currentOp = ((int) (this.value.charAt(length - i - 1) - 48) - (int) (other.value.charAt(length - i - 1) - 48));
+            currentOp = ((int) (this.numericalValue.charAt(length - i - 1) - 48) - (int) (other.numericalValue.charAt(length - i - 1) - 48));
             if (carryOver) {
                 currentOp--;
             }
@@ -76,91 +76,110 @@ class BigNumber {
             result.insert(0, Integer.toString(currentOp));
 
         }
-        this.value = result.toString();
+        this.numericalValue = result.toString();
         return this;
 
     }
 
     // Multiplica
     BigNumber mult(BigNumber other) {
-        this.value = reducer(this.value);
-        other.value = reducer(other.value);
+        this.numericalValue = reducer(this.numericalValue);
+        other.numericalValue = reducer(other.numericalValue);
 
         BigNumber tmpThis = new BigNumber(this);
         BigNumber tmpNum = new BigNumber("0");
         int currOp = 0;
-        for (int i = 0; i < other.value.length(); i++) {
-            currOp = other.value.charAt(other.value.length() - i - 1) - 48;
-
+        for (int i = 0; i < other.numericalValue.length(); i++) {
+            currOp = other.numericalValue.charAt(other.numericalValue.length() - i - 1) - 48;
             for (int j = 0; j < currOp; j++) {
-
                 tmpNum.add(tmpThis);
             }
-            tmpThis.value += "0";
-
+            tmpThis.numericalValue += "0";
         }
-
         return tmpNum;
     }
 
     // Divideix
     BigNumber div(BigNumber other) {
-        boolean done = false;
-        int counter = 0;
-        int restCounter = 0;
-        BigNumber currOP = new BigNumber("");
+
         BigNumber rest = new BigNumber("");
-        StringBuilder tmpStr = new StringBuilder();
-        String tmpStorage = "";
-        while (this.compareTo(other) != -1) {
-
-
-            if (currOP.compareTo(other) == -1) {
-                counter++;
-
-                tmpStr.append(this.value.substring(counter - 1, counter));
-                currOP.value = tmpStr.toString();
-
-            } else {
-                while (currOP.compareTo(other) != -1) {
-                    currOP.sub(other);
-                    currOP.value = reducer(currOP.value);
-                    restCounter++;
+        BigNumber result = new BigNumber("");
+        for (int i = 0; i < this.numericalValue.length(); i++) {
+            int resCount = 0;
+            rest.numericalValue += this.numericalValue.charAt(i);
+            if (rest.compareTo(other) != -1) {
+                while (rest.compareTo(other) != -1) {
+                    resCount++;
+                    rest.sub(other);
                 }
-                currOP.value = reducer(currOP.value);
-                tmpStorage = currOP.value;
-                tmpStr.setLength(0);
-                tmpStr.append(this.value);
-                tmpStr.replace(0, counter, currOP.value);
-                counter -= (counter - currOP.value.length());
-                this.value = tmpStr.toString();
-
-                tmpStr.setLength(0);
-                tmpStr.append(tmpStorage);
-                rest.value += restCounter;
-                restCounter = 0;
-
-
+                rest.numericalValue = reducer(rest.numericalValue);
             }
+            result.numericalValue += resCount;
         }
-        if (currOP.compareTo(new BigNumber("0")) == 0) {
-            rest.value += "0";
-        }
-        return this;
+        return result;
     }
 
     // Arrel quadrada
     BigNumber sqrt() {
-        return this;
+        BigNumber result = new BigNumber("");
+        BigNumber numTester = new BigNumber("");
+        BigNumber rest = new BigNumber("");
+        StringBuilder tmpStr = new StringBuilder();
+
+        if (this.numericalValue.length() % 2 == 1) {
+            this.numericalValue = "0" + this.numericalValue;
+        }
+
+        int loop =  (this.numericalValue.length()) / 2;
+        for (int i = 0; i < loop; i++) {
+
+            tmpStr.replace(0, tmpStr.length(), this.numericalValue);
+            rest.numericalValue += tmpStr.substring(0, 2);
+
+            tmpStr.replace(0, tmpStr.length(), this.numericalValue);
+            tmpStr.replace(0, 2, "");
+            this.numericalValue = tmpStr.toString();
+
+
+            int j = 0;
+            for (j = 0; j < 11; j++) {
+
+                numTester.numericalValue = result.mult(new BigNumber("2")).numericalValue + j;
+                numTester.numericalValue = numTester.mult(new BigNumber(Integer.toString(j))).numericalValue;
+
+                if (numTester.compareTo(rest) == 1) {
+                    j--;
+                    numTester.numericalValue = result.mult(new BigNumber("2")).numericalValue + (j);
+                    numTester.numericalValue = numTester.mult(new BigNumber(Integer.toString(j))).numericalValue;
+                    numTester.numericalValue = reducer(numTester.numericalValue);
+
+                    break;
+                } else if (numTester.compareTo(rest) == 0) {
+                    numTester.numericalValue = result.mult(new BigNumber("2")).numericalValue + (j);
+                    numTester.numericalValue = numTester.mult(new BigNumber(Integer.toString(j))).numericalValue;
+                    numTester.numericalValue = reducer(numTester.numericalValue);
+
+                    break;
+                }
+            }
+
+            rest.numericalValue = rest.sub(numTester).numericalValue;
+            result.numericalValue += j;
+
+
+        }
+
+
+        return result;
 
     }
 
     // Potència
     BigNumber power(int n) {
-        BigNumber result = new BigNumber(this.value);
+        BigNumber result = new BigNumber(this.numericalValue);
 
         for (int i = 0; i < n - 1; i++) {
-            result.value = result.mult(this).value;
+            result.numericalValue = result.mult(this).numericalValue;
         }
         return result;
 
@@ -168,8 +187,8 @@ class BigNumber {
 
     // Factorial
     BigNumber factorial() {
-        BigNumber result = new BigNumber(this.value);
-        BigNumber counter = new BigNumber(this.value);
+        BigNumber result = new BigNumber(this.numericalValue);
+        BigNumber counter = new BigNumber(this.numericalValue);
         BigNumber one = new BigNumber("1");
         while (counter.compareTo(new BigNumber("0")) != 0) {
 
@@ -177,7 +196,7 @@ class BigNumber {
             if (counter.compareTo(new BigNumber("0")) == 0) {
                 break;
             }
-            result.value = result.mult(counter).value;
+            result.numericalValue = result.mult(counter).numericalValue;
         }
 
         return result;
@@ -188,9 +207,9 @@ class BigNumber {
     BigNumber mcd(BigNumber other) {
         while (this.compareTo(other) != 0) {
             if (this.compareTo(other) == 1) {
-                this.value = this.sub(other).value;
+                this.numericalValue = this.sub(other).numericalValue;
             } else {
-                other.value = other.sub(this).value;
+                other.numericalValue = other.sub(this).numericalValue;
             }
         }
         return this;
@@ -200,19 +219,19 @@ class BigNumber {
     // Compara dos BigNumber. Torna 0 si són iguals, -1
 // si el primer és menor i torna 1 si el segon és menor
     public int compareTo(BigNumber other) {
-        if (other.value.length() > this.value.length()) {
-            this.value = equalizer(this.value, other.value.length());
+        if (other.numericalValue.length() > this.numericalValue.length()) {
+            this.numericalValue = equalizer(this.numericalValue, other.numericalValue.length());
         } else {
-            other.value = equalizer(other.value, this.value.length());
+            other.numericalValue = equalizer(other.numericalValue, this.numericalValue.length());
         }
-        if (this.value.length() == other.value.length()) {
-            if (this.value.equals(other.value)) {
+        if (this.numericalValue.length() == other.numericalValue.length()) {
+            if (this.numericalValue.equals(other.numericalValue)) {
                 return 0;
             } else {
-                for (int i = 0; i < this.value.length(); i++) {
-                    if (this.value.charAt(i) > other.value.charAt(i)) {
+                for (int i = 0; i < this.numericalValue.length(); i++) {
+                    if (this.numericalValue.charAt(i) > other.numericalValue.charAt(i)) {
                         return 1;
-                    } else if (this.value.charAt(i) < other.value.charAt(i)) {
+                    } else if (this.numericalValue.charAt(i) < other.numericalValue.charAt(i)) {
                         return -1;
                     }
                 }
@@ -224,7 +243,7 @@ class BigNumber {
 
     // Torna un String representant el número
     public String toString() {
-        return "";
+        return this.numericalValue;
 
     }
 
@@ -239,14 +258,13 @@ class BigNumber {
             return false;
         }
         BigNumber ot = (BigNumber) other;
-        if (ot.value.length() > this.value.length()) {
-            this.value = equalizer(this.value, ot.value.length());
+        if (ot.numericalValue.length() > this.numericalValue.length()) {
+            this.numericalValue = equalizer(this.numericalValue, ot.numericalValue.length());
         } else {
-            ot.value = equalizer(ot.value, this.value.length());
+            ot.numericalValue = equalizer(ot.numericalValue, this.numericalValue.length());
 
         }
-        return this.value.equals(ot.value);
-
+        return this.numericalValue.equals(ot.numericalValue);
     }
 
     public String equalizer(String currentStr, int targetSize) {
