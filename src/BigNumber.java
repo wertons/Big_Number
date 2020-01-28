@@ -112,6 +112,7 @@ class BigNumber {
         this.numericalValue = reducer(this.numericalValue);
         other.numericalValue = reducer(other.numericalValue);
 
+
         BigNumber tmpThis = new BigNumber(this);
         BigNumber tmpNum = new BigNumber("0");
         int currOp = 0;
@@ -139,6 +140,17 @@ class BigNumber {
 
         BigNumber rest = new BigNumber("");
         BigNumber result = new BigNumber("");
+
+        BigNumber zero = new BigNumber("0");
+
+        //We check if either of the numbers are 0 in which case the operation returns 0
+        if (this.compareTo(zero) == 0){
+            return  zero;
+        } else if (other.compareTo(zero) == 0){
+            //This is technically a null number, we simply return 0 as a basis for errors
+            return  zero;
+        }
+
 
         //For each position in the original number
         for (int i = 0; i < this.numericalValue.length(); i++) {
@@ -297,14 +309,19 @@ class BigNumber {
     BigNumber mcd(BigNumber other) {
 
         int difference = this.numericalValue.length() - other.numericalValue.length();
+        this.numericalValue = reducer(this.numericalValue);
+        other.numericalValue = reducer(other.numericalValue);
+
+        BigNumber zero = new BigNumber("0");
+        if (this.compareTo(zero) == 0 || other.compareTo(zero) == 0 ){
+            return  zero;
+        }
 
         if (difference < 4) {
             //Case for small differences
 
             //We use the Euclidean algorithm, which subtracts the smaller number from the bigger one until they are equal
             while (this.compareTo(other) != 0) {
-                this.numericalValue = reducer(this.numericalValue);
-                other.numericalValue = reducer(other.numericalValue);
 
                 if (this.compareTo(other) == 1) {
                     this.numericalValue = this.sub(other).numericalValue;

@@ -155,9 +155,8 @@ public class BigNumberTest {
         BigNumber b1, b2;
 
         b1 = new BigNumber("2");
-        b2 = new BigNumber("02");
-        assertEquals(b1, b2);
-        assertEquals(new BigNumber("4"), b1.mult(b2));
+        b2 = new BigNumber("0");
+        assertEquals(new BigNumber("0"), b1.mult(b2));
 
         b1 = new BigNumber("6");
         b2 = new BigNumber("6");
@@ -218,9 +217,9 @@ public class BigNumberTest {
     public void divisions() {
         BigNumber b1, b2;
 
-        b1 = new BigNumber("241");
-        b2 = new BigNumber("2");
-        assertEquals(new BigNumber("120"), b1.div(b2));
+        b1 = new BigNumber("200");
+        b2 = new BigNumber("0");
+        assertEquals(new BigNumber("0"), b1.div(b2));
 
         b1 = new BigNumber("100");
         b2 = new BigNumber("10");
@@ -332,9 +331,9 @@ public class BigNumberTest {
     public void mcd() {
         BigNumber b1, b2;
 
-        b1 = new BigNumber("155");
+        b1 = new BigNumber("0");
         b2 = new BigNumber("60");
-        assertEquals(new BigNumber("5"), b1.mcd(b2));
+        assertEquals(new BigNumber("0"), b1.mcd(b2));
 
         b1 = new BigNumber("168");
         b2 = new BigNumber("584");
