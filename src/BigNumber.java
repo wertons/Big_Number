@@ -1,7 +1,5 @@
 class BigNumber {
-
-    String numericalValue = "";
-
+    private String numericalValue = "";
 
     // Constructor 1
     public BigNumber(String s) {
@@ -135,20 +133,25 @@ class BigNumber {
         return tmpNum;
     }
 
-    // Division
-    BigNumber div(BigNumber other) {
+    //Total Division
+    BigNumber[] division(BigNumber other) {
 
         BigNumber rest = new BigNumber("");
         BigNumber result = new BigNumber("");
 
         BigNumber zero = new BigNumber("0");
+        BigNumber[] zeroS = new BigNumber[]{zero, zero};
+
 
         //We check if either of the numbers are 0 in which case the operation returns 0
-        if (this.compareTo(zero) == 0){
-            return  zero;
-        } else if (other.compareTo(zero) == 0){
-            //This is technically a null number, we simply return 0 as a basis for errors
-            return  zero;
+        if (this.compareTo(zero) == 0) {
+            return zeroS;
+        } else if (other.compareTo(zero) == 0) {
+            //This is technically a posible operation but not with basic math
+            try {
+            } catch (Exception e) {
+                System.out.println("A division by 0 is undefined");
+            }
         }
 
 
@@ -174,38 +177,26 @@ class BigNumber {
             //Now we add the counter to the result
             result.numericalValue += resCount;
         }
-        return result;
+
+        return new BigNumber[]{result, rest};
+    }
+
+    // Dividend
+    BigNumber div(BigNumber other) {
+
+        //We extract the result from a division
+        BigNumber[] arr;
+        arr = this.division(other);
+        return arr[0];
     }
 
     // Modulus
     BigNumber mod(BigNumber other) {
 
-        BigNumber rest = new BigNumber("");
-        BigNumber result = new BigNumber("");
-
-        //For each position in the original number
-        for (int i = 0; i < this.numericalValue.length(); i++) {
-
-            //We reset the counter from last run of the loop
-            int resCount = 0;
-
-            //We add the current operator to the rest
-            rest.numericalValue += this.numericalValue.charAt(i);
-
-            //If the number is big enough to be operated on we make subtractions until it is no longer possible
-            //Each time we do this we store it in a counter
-            if (rest.compareTo(other) != -1) {
-                while (rest.compareTo(other) != -1) {
-                    resCount++;
-                    rest.sub(other);
-                }
-                rest.numericalValue = reducer(rest.numericalValue);
-            }
-
-            //Now we add the counter to the result
-            result.numericalValue += resCount;
-        }
-        return rest;
+        //We extract the leftover from a division
+        BigNumber[] arr;
+        arr = this.division(other);
+        return arr[1];
     }
 
     // Square Root
@@ -238,10 +229,14 @@ class BigNumber {
             int j = 0;
             for (j = 0; j < 11; j++) {
 
+                //We create the operator for the rest, similar to a division
                 numTester.numericalValue = result.mult(new BigNumber("2")).numericalValue + j;
                 numTester.numericalValue = numTester.mult(new BigNumber(Integer.toString(j))).numericalValue;
 
                 if (numTester.compareTo(rest) == 1) {
+
+                    //If the numTester if bigger than the rest it means that the last operations is the desired number,
+                    // so we remove one from the counter so we get the correct number
                     j--;
                     numTester.numericalValue = result.mult(new BigNumber("2")).numericalValue + (j);
                     numTester.numericalValue = numTester.mult(new BigNumber(Integer.toString(j))).numericalValue;
@@ -249,6 +244,8 @@ class BigNumber {
 
                     break;
                 } else if (numTester.compareTo(rest) == 0) {
+
+                    //If the numTester is equal to the rest it means the counter is the desired result
                     numTester.numericalValue = result.mult(new BigNumber("2")).numericalValue + (j);
                     numTester.numericalValue = numTester.mult(new BigNumber(Integer.toString(j))).numericalValue;
                     numTester.numericalValue = reducer(numTester.numericalValue);
@@ -257,6 +254,7 @@ class BigNumber {
                 }
             }
 
+            //We add the counter to the result
             rest.numericalValue = rest.sub(numTester).numericalValue;
             result.numericalValue += j;
 
@@ -313,8 +311,8 @@ class BigNumber {
         other.numericalValue = reducer(other.numericalValue);
 
         BigNumber zero = new BigNumber("0");
-        if (this.compareTo(zero) == 0 || other.compareTo(zero) == 0 ){
-            return  zero;
+        if (this.compareTo(zero) == 0 || other.compareTo(zero) == 0) {
+            return zero;
         }
 
         if (difference < 4) {
